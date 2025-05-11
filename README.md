@@ -1,7 +1,7 @@
 ## Libs
 
 - [x] Next.js 14 (App Router)
-- [ ] Next-Auth (com credenciais)
+- [x] Next-Auth (com credenciais)
 - [x] Tailwind CSS + CSS Modules
 - [ ] Zod
 - [x] Context API

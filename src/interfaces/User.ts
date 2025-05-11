@@ -13,3 +13,8 @@ export interface AuthenticateUserModel {
   token: string;
   user: Omit<UserModel, "password">;
 }
+
+export interface AuthenticateUserRequest {
+  email: string;
+  password: string;
+}

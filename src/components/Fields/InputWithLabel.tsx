@@ -4,7 +4,7 @@ import {
   InputHTMLAttributes,
   LabelHTMLAttributes,
 } from "react";
-import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
+import { FieldError } from "react-hook-form";
 
 export interface InputProps {
   name: string;
@@ -20,7 +20,7 @@ export interface InputProps {
     children: React.ReactNode;
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  errors?: FieldError;
 }
 
 export const InputWithLabel = ({

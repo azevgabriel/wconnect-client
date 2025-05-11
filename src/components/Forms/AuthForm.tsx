@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,15 +12,20 @@ export const AuthenticateForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<{ email: string; password: string }>();
 
   const [loading, setLoading] = useState(false);
 
-  const handleLoginForm = async (data: unknown) => {
+  const handleLoginForm = async (data: { email: string; password: string }) => {
     setLoading(true);
 
     try {
-      console.log("Login data", data);
+      await signIn("credentials", {
+        redirect: true,
+        email: data.email,
+        password: data.password,
+        callbackUrl: "/inicio",
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -63,7 +69,7 @@ export const AuthenticateForm = () => {
                   html: { htmlFor: "email" },
                   children: "Seu e-mail",
                 }}
-                errors={errors}
+                errors={errors.email}
               />
               <InputWithLabel
                 name="password"
@@ -82,7 +88,7 @@ export const AuthenticateForm = () => {
                   html: { htmlFor: "password" },
                   children: "Sua senha",
                 }}
-                errors={errors}
+                errors={errors.password}
               />
               <div className="flex flex-col space-y-4">
                 <Button

@@ -18,7 +18,7 @@ export default function Register() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm<AddUserModel & { confirmPassword: string }>();
 
   const [loading, setLoading] = useState(false);
 
@@ -79,7 +79,7 @@ export default function Register() {
                     html: { htmlFor: "name" },
                     children: "Seu nome",
                   }}
-                  errors={errors}
+                  errors={errors.name}
                 />
                 <InputWithLabel
                   name="email"
@@ -98,7 +98,7 @@ export default function Register() {
                     html: { htmlFor: "email" },
                     children: "Seu e-mail",
                   }}
-                  errors={errors}
+                  errors={errors.email}
                 />
                 <InputWithLabel
                   name="password"
@@ -116,7 +116,7 @@ export default function Register() {
                     html: { htmlFor: "password" },
                     children: "Sua senha",
                   }}
-                  errors={errors}
+                  errors={errors.password}
                 />
                 <InputWithLabel
                   name="confirm-password"
@@ -137,7 +137,7 @@ export default function Register() {
                     html: { htmlFor: "confirm-password" },
                     children: "Confirme sua senha",
                   }}
-                  errors={errors}
+                  errors={errors.confirmPassword}
                 />
               </div>
               <div className="flex flex-col space-y-4">
