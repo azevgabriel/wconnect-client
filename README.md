@@ -3,17 +3,17 @@
 - [x] Next.js 14 (App Router)
 - [x] Next-Auth (com credenciais)
 - [x] Tailwind CSS + CSS Modules
-- [ ] Zod
+- [x] Zod **(Utilizando no back-end)** - Outro motivo é que se você validar bem com o React Hook Form, não precisa de mais uma validação no front-end. Está meio redundante Zod + React Hook Form
 - [x] Context API
-- [ ] Jest
+- [x] Jest
 - [x] React Hook Form
-- [ ] Lucide React
-- [ ] date-fns
+- [x] Lucide React
+- [x] date-fns
 
 ## Lógicas
 
-- [ ] Middleware de proteção de rotas - `next-auth`
-- [ ] Persistência de sessão
+- [x] Middleware de proteção de rotas - `next-auth`
+- [x] Persistência de sessão
 
 ## Páginas
 

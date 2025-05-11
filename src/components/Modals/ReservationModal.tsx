@@ -1,13 +1,9 @@
-// import { useSession } from "@/hooks/useSession";
-import { ModalActions } from "@/interfaces/ModalActions";
-import { AddUserModel, UserModel } from "@/interfaces/User";
-// import { addUserRequest } from "@/requests/users/add-user";
-// import { deleteUserByIdRequest } from "@/requests/users/delete-user-by-id";
-// import { updateUserRequestById } from "@/requests/users/update-user-by-id";
 import { useAlert } from "@/hooks/useAlert";
+import { ModalActions } from "@/interfaces/ModalActions";
+import { AddReservationModel } from "@/interfaces/Reservation";
+import { AddUserModel, UserModel } from "@/interfaces/User";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { InputWithLabel } from "../Fields/InputWithLabel";
 import { Button } from "../Shared/Button";
 
 interface UserModalProps {
@@ -17,14 +13,13 @@ interface UserModalProps {
 }
 
 export const ReservationModal = ({ props, setProps }: UserModalProps) => {
-  // const { user, login } = useSession();
   const { showAlert } = useAlert();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<AddReservationModel>();
 
   const [formData, setFormData] = useState({
     id: "",
@@ -51,15 +46,6 @@ export const ReservationModal = ({ props, setProps }: UserModalProps) => {
   };
 
   const handleAddUser = async (data: AddUserModel) => {
-    console.log("Add user data", data);
-
-    // await addUserRequest({ name, email, password });
-
-    // if (callback) await callback();
-    // await login({
-    //   password,
-    //   email,
-    // });
     onReset();
   };
 
@@ -168,104 +154,10 @@ export const ReservationModal = ({ props, setProps }: UserModalProps) => {
               </div>
             </>
           ) : (
-            <form className="p-4 md:p-5" onSubmit={handleSubmit(handleAction)}>
-              <div className="grid gap-4 mb-4 grid-cols-1">
-                <InputWithLabel
-                  name="name"
-                  inputProps={{
-                    placeholder: "João da Silva",
-                    ...register("name", {
-                      required: "Nome é obrigatório",
-                      minLength: {
-                        value: 3,
-                        message: "Nome deve ter pelo menos 3 caracteres",
-                      },
-                      maxLength: {
-                        value: 50,
-                        message: "Nome deve ter no máximo 50 caracteres",
-                      },
-                    }),
-                  }}
-                  label={{
-                    html: { htmlFor: "name" },
-                    children: "Seu nome",
-                  }}
-                  errors={errors}
-                />
-                <InputWithLabel
-                  name="email"
-                  inputProps={{
-                    placeholder: "name@example.com",
-                    ...register("email", {
-                      required: "Email é obrigatório",
-                      pattern: {
-                        value:
-                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                        message: "Email inválido",
-                      },
-                    }),
-                  }}
-                  label={{
-                    html: { htmlFor: "email" },
-                    children: "Seu e-mail",
-                  }}
-                  errors={errors}
-                />
-                {props?.action === "add" && (
-                  <>
-                    <InputWithLabel
-                      name="password"
-                      inputProps={{
-                        placeholder: "segredo_super_secreto",
-                        ...register("password", {
-                          required: "Senha é obrigatória",
-                          minLength: {
-                            value: 6,
-                            message: "Senha deve ter pelo menos 6 caracteres",
-                          },
-                        }),
-                      }}
-                      label={{
-                        html: { htmlFor: "password" },
-                        children: "Sua senha",
-                      }}
-                      errors={errors}
-                    />
-                    <InputWithLabel
-                      name="confirm-password"
-                      inputProps={{
-                        placeholder: "segredo_super_secreto_confirmado",
-                        ...register("confirmPassword", {
-                          required: "Confirmação de senha é obrigatória",
-                          minLength: {
-                            value: 6,
-                            message: "Senha deve ter pelo menos 6 caracteres",
-                          },
-                          validate: (value) =>
-                            value === formData.password ||
-                            "As senhas não conferem",
-                        }),
-                      }}
-                      label={{
-                        html: { htmlFor: "confirm-password" },
-                        children: "Confirme sua senha",
-                      }}
-                      errors={errors}
-                    />
-                  </>
-                )}
-              </div>
-              <div className="flex flex-col space-y-4">
-                <Button
-                  htmlProps={{
-                    type: "submit",
-                  }}
-                  loading={loading}
-                >
-                  {props.action === "add" ? "Criar" : "Editar"} Usuário
-                </Button>
-              </div>
-            </form>
+            <form
+              className="p-4 md:p-5"
+              onSubmit={handleSubmit(handleAction)}
+            ></form>
           )}
         </div>
       </div>
