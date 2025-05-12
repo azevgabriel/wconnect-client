@@ -96,7 +96,7 @@ export const ReservationModal = ({
       await disableReservationById(props.data.id, session?.accessToken || "");
       if (callback) await callback();
       onReset();
-    } catch (error) {
+    } catch {
       showAlert("danger", `Erro ao excluir reserva!`);
       setLoading(false);
     }
