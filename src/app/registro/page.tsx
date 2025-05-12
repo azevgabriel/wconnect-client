@@ -4,6 +4,8 @@ import { InputWithLabel } from "@/components/Fields/InputWithLabel";
 import { Button } from "@/components/Shared/Button";
 import { useAlert } from "@/hooks/useAlert";
 import { AddUserModel } from "@/interfaces/User";
+import { registerUser } from "@/requests/users/register";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,16 +24,17 @@ export default function Register() {
 
   const [loading, setLoading] = useState(false);
 
-  const handleAddUser = async (data: AddUserModel) => {
-    console.log("Add user data", data);
-    setLoading(false);
-  };
-
-  const handleAction = async (data: unknown) => {
+  const handleAction = async (data: AddUserModel) => {
     setLoading(true);
 
     try {
-      await handleAddUser(data as AddUserModel);
+      await registerUser(data);
+      await signIn("credentials", {
+        redirect: true,
+        email: data.email,
+        password: data.password,
+        callbackUrl: "/inicio",
+      });
       setLoading(false);
     } catch {
       setLoading(false);
@@ -103,6 +106,7 @@ export default function Register() {
                 <InputWithLabel
                   name="password"
                   inputProps={{
+                    type: "password",
                     placeholder: "segredo_super_secreto",
                     ...register("password", {
                       required: "Senha é obrigatória",
@@ -119,8 +123,9 @@ export default function Register() {
                   errors={errors}
                 />
                 <InputWithLabel
-                  name="confirm-password"
+                  name="confirmPassword"
                   inputProps={{
+                    type: "password",
                     placeholder: "segredo_super_secreto_confirmado",
                     ...register("confirmPassword", {
                       required: "Confirmação de senha é obrigatória",
@@ -134,7 +139,7 @@ export default function Register() {
                     }),
                   }}
                   label={{
-                    html: { htmlFor: "confirm-password" },
+                    html: { htmlFor: "confirmPassword" },
                     children: "Confirme sua senha",
                   }}
                   errors={errors}

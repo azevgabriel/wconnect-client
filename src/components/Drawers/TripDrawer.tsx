@@ -153,9 +153,20 @@ export const TripDrawer = ({ openId, onClose }: TripDrawerProps) => {
                           `${res.endDate.split("T")[0]}T03:00:00`,
                           "dd/MM/yyyy"
                         )}
+                        {" - "}
+                        {Math.ceil(
+                          (new Date(res.endDate).getTime() -
+                            new Date(res.startDate).getTime()) /
+                            (1000 * 3600 * 24)
+                        )}{" "}
+                        dias
                       </p>
                       <p className="text-xs">
-                        R$ {res.value.toFixed(2)} |{" "}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(res.value)}
+                        {" - "}
                         {ReservationStatusPreparation[res.status].label}
                       </p>
                     </div>
@@ -174,7 +185,18 @@ export const TripDrawer = ({ openId, onClose }: TripDrawerProps) => {
                       >
                         <Pencil />
                       </Button>
-                      <Button type="danger">
+                      <Button
+                        type="danger"
+                        htmlProps={{
+                          onClick: () => {
+                            setReservationModalProps({
+                              action: "delete",
+                              open: true,
+                              data: res,
+                            });
+                          },
+                        }}
+                      >
                         <Trash2 />
                       </Button>
                     </div>

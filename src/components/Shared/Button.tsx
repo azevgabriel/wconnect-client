@@ -32,7 +32,7 @@ export const Button = ({
       type={htmlProps?.type || "button"}
       className={`${
         CLASS_NAME_MAP(htmlProps?.disabled)[type]
-      } px-5 py-2.5 text-center transition-all ${
+      } px-5 py-2.5 text-center transition-all ${htmlProps?.className} ${
         htmlProps?.disabled || loading
           ? "opacity-50 cursor-not-allowed"
           : "cursor-pointer"

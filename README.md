@@ -24,13 +24,13 @@
 
 ### Reservas
 
-- [ ] Validação de datas (não permitir data final antes da inicial)
-- [ ] Cálculo automático de duração da reserva
+- [x] Validação de datas (não permitir data final antes da inicial)
+- [x] Cálculo automático de duração da reserva
 
 ## Componentes Obrigatórios
 
 - [x] AuthForm: Componente reutilizável para login/registro
 - [x] TripCard: Card de viagem com status visual
-- [ ] ReservationModal: Modal para criação/edição de reservas
+- [x] ReservationModal: Modal para criação/edição de reservas
 - [x] DateRangePicker: Componente customizado para seleção de datas
 - [x] StatusBadge: Componente de status com cores temáticas

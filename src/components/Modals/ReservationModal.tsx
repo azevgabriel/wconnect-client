@@ -5,7 +5,10 @@ import {
   ReservationModel,
 } from "@/interfaces/Reservation";
 import { addReservation } from "@/requests/reservations/add";
+import { disableReservationById } from "@/requests/reservations/disable-by-id";
 import { updateReservationById } from "@/requests/reservations/update-by-id";
+import { ReservationTypePreparation } from "@/utils/constants/reservation";
+import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -86,6 +89,19 @@ export const ReservationModal = ({
     );
   };
 
+  const handleDisableReservation = async () => {
+    if (!props.data?.id) throw new Error("ID da reserva não encontrado");
+
+    try {
+      await disableReservationById(props.data.id, session?.accessToken || "");
+      if (callback) await callback();
+      onReset();
+    } catch (error) {
+      showAlert("danger", `Erro ao excluir reserva!`);
+      setLoading(false);
+    }
+  };
+
   const handleAction = async (data: Omit<AddReservationModel, "tripId">) => {
     setLoading(true);
     data = {
@@ -123,124 +139,148 @@ export const ReservationModal = ({
         >
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900">
-              {props.action === "add" ? "Criar" : "Editar"} Reserva
+              {props.action === "add"
+                ? "Criar"
+                : props.action === "update"
+                ? "Editar"
+                : "Deletar"}{" "}
+              Reserva
             </h3>
             <div className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 inline-flex justify-center items-center ">
               <Button type="link" htmlProps={{ onClick: onReset }}>
-                <svg
-                  className="w-3 h-3"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
+                <X />
               </Button>
             </div>
           </div>
+          {props?.action === "delete" ? (
+            <>
+              <div className="p-4 md:p-5">
+                <h3 className="text-md  text-gray-900">
+                  Tem certeza que deseja excluir a reserva de{" "}
+                  {
+                    ReservationTypePreparation[props.data?.type || "activity"]
+                      .label
+                  }
+                </h3>
+              </div>
+              <div className="flex flex-row space-x-4 p-4">
+                <div className="flex-1">
+                  <Button
+                    htmlProps={{
+                      onClick: onReset,
+                      disabled: loading,
+                      className: "w-full",
+                    }}
+                  >
+                    Não
+                  </Button>
+                </div>
+                <div className="flex-1">
+                  <Button
+                    htmlProps={{
+                      onClick: handleDisableReservation,
+                      className: "w-full",
+                    }}
+                    type="danger"
+                    loading={loading}
+                  >
+                    Sim
+                  </Button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <form className="p-4 md:p-5" onSubmit={handleSubmit(handleAction)}>
+              <div className="grid gap-4 mb-4">
+                <DateInputWithLabel
+                  name="startDate"
+                  inputProps={{
+                    ...register("startDate", {
+                      required: "Data inicial obrigatória",
+                      validate: (value) => {
+                        const today = new Date();
+                        const selectedDate = new Date(value);
+                        return (
+                          selectedDate >= today ||
+                          "Data de início não pode ser anterior à data atual"
+                        );
+                      },
+                    }),
+                  }}
+                  errors={errors}
+                  label={{
+                    html: { htmlFor: "startDate" },
+                    children: "Data de Início",
+                  }}
+                />
 
-          <form className="p-4 md:p-5" onSubmit={handleSubmit(handleAction)}>
-            <div className="grid gap-4 mb-4">
-              <DateInputWithLabel
-                name="startDate"
-                inputProps={{
-                  ...register("startDate", {
-                    required: "Data inicial obrigatória",
-                  }),
-                }}
-                errors={errors}
-                label={{
-                  html: { htmlFor: "startDate" },
-                  children: "Data de Início",
-                }}
-              />
+                <DateInputWithLabel
+                  name="endDate"
+                  inputProps={{
+                    ...register("endDate", {
+                      required: "Data final obrigatória",
+                      validate: (endDate) => {
+                        if (!startDateValue || !endDate) return true;
 
-              <DateInputWithLabel
-                name="endDate"
-                inputProps={{
-                  ...register("endDate", {
-                    required: "Data final obrigatória",
-                    validate: (endDate) => {
-                      if (!startDateValue || !endDate) return true;
-                      const start = new Date(startDateValue);
-                      const end = new Date(endDate);
-                      return (
-                        end >= start ||
-                        "Data final não pode ser antes da inicial"
-                      );
-                    },
-                  }),
-                }}
-                errors={errors}
-                label={{
-                  html: { htmlFor: "endDate" },
-                  children: "Data de Fim",
-                }}
-              />
+                        const start = new Date(startDateValue);
+                        start.setHours(0, 0, 0, 0);
+                        const end = new Date(endDate);
+                        end.setHours(0, 0, 0, 0);
+                        return (
+                          start < end ||
+                          "Data final deve ser maior que a inicial"
+                        );
+                      },
+                    }),
+                  }}
+                  errors={errors}
+                  label={{
+                    html: { htmlFor: "endDate" },
+                    children: "Data de Fim",
+                  }}
+                />
 
-              <SelectWithLabel
-                name="type"
-                label={{
-                  html: { htmlFor: "type" },
-                  children: "Tipo de Reserva",
-                }}
-                selectProps={{
-                  ...register("type", { required: "Tipo é obrigatório" }),
-                }}
-                options={[
-                  { value: "flight", label: "Voo" },
-                  { value: "hotel", label: "Hotel" },
-                  { value: "car", label: "Carro" },
-                  { value: "activity", label: "Atividade" },
-                ]}
-                errors={errors}
-              />
+                <SelectWithLabel
+                  name="type"
+                  label={{
+                    html: { htmlFor: "type" },
+                    children: "Tipo de Reserva",
+                  }}
+                  selectProps={{
+                    ...register("type", { required: "Tipo é obrigatório" }),
+                  }}
+                  options={[
+                    { value: "flight", label: "Voo" },
+                    { value: "hotel", label: "Hotel" },
+                    { value: "car", label: "Carro" },
+                    { value: "activity", label: "Atividade" },
+                  ]}
+                  errors={errors}
+                />
 
-              <InputWithLabel
-                name="value"
-                inputProps={{
-                  type: "number",
-                  step: "0.01",
-                  ...register("value", {
-                    required: "Valor é obrigatório",
-                    min: { value: 0, message: "Valor deve ser positivo" },
-                  }),
-                }}
-                label={{
-                  html: { htmlFor: "value" },
-                  children: "Valor (R$)",
-                }}
-                errors={errors}
-              />
+                <InputWithLabel
+                  name="value"
+                  inputProps={{
+                    type: "number",
+                    step: "0.01",
+                    ...register("value", {
+                      required: "Valor é obrigatório",
+                      min: { value: 0, message: "Valor deve ser positivo" },
+                    }),
+                  }}
+                  label={{
+                    html: { htmlFor: "value" },
+                    children: "Valor (R$)",
+                  }}
+                  errors={errors}
+                />
 
-              <SelectWithLabel
-                name="status"
-                label={{
-                  html: { htmlFor: "status" },
-                  children: "Status",
-                }}
-                selectProps={{
-                  ...register("status", { required: "Status é obrigatório" }),
-                }}
-                options={[
-                  { value: "confirmed", label: "Confirmado" },
-                  { value: "pending", label: "Pendente" },
-                  { value: "cancelled", label: "Cancelado" },
-                ]}
-                errors={errors}
-              />
-
-              <Button htmlProps={{ type: "submit" }} loading={loading}>
-                {props.action === "add" ? "Criar" : "Editar"} Reserva
-              </Button>
-            </div>
-          </form>
+                <Button htmlProps={{ type: "submit" }} loading={loading}>
+                  {props.action === "add" ? "Criar" : "Editar"} Reserva
+                </Button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </div>

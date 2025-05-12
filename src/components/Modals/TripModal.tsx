@@ -192,6 +192,7 @@ export const TripModal = ({ props, setProps, callback }: UserModalProps) => {
                   value: value,
                   label: TripStatusPreparation[value].label,
                 }))}
+                errors={errors}
               />
               <div className="flex flex-col space-y-4">
                 <Button
