@@ -21,11 +21,10 @@ export const loadTrips = async (
   const queryString = new URLSearchParams({
     page: query.page.toString(),
     limit: query.limit.toString(),
-    filters: JSON.stringify(query.filters),
   }).toString();
 
   const response = await fetch(
-    `${process?.env?.NEXT_PUBLIC_API_URL}/trip/${queryString}}`,
+    `${process?.env?.NEXT_PUBLIC_API_URL}/trips?${queryString}R`,
     {
       method: "GET",
       headers: {

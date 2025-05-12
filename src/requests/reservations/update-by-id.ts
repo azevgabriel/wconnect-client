@@ -3,7 +3,7 @@ import {
   ReservationModel,
 } from "@/interfaces/Reservation";
 
-export const disableReservationById = async (
+export const updateReservationById = async (
   id: string,
   data: Partial<AddReservationModel>,
   token: string

@@ -45,9 +45,9 @@ export default function Register() {
         <Image
           className="h-20 w-71"
           src="/logo.svg"
-          alt="logo"
-          width={384}
-          height={108}
+          alt="Logo da Wconnect"
+          width={151}
+          height={56}
         />
         <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -79,7 +79,7 @@ export default function Register() {
                     html: { htmlFor: "name" },
                     children: "Seu nome",
                   }}
-                  errors={errors.name}
+                  errors={errors}
                 />
                 <InputWithLabel
                   name="email"
@@ -98,7 +98,7 @@ export default function Register() {
                     html: { htmlFor: "email" },
                     children: "Seu e-mail",
                   }}
-                  errors={errors.email}
+                  errors={errors}
                 />
                 <InputWithLabel
                   name="password"
@@ -116,7 +116,7 @@ export default function Register() {
                     html: { htmlFor: "password" },
                     children: "Sua senha",
                   }}
-                  errors={errors.password}
+                  errors={errors}
                 />
                 <InputWithLabel
                   name="confirm-password"
@@ -137,7 +137,7 @@ export default function Register() {
                     html: { htmlFor: "confirm-password" },
                     children: "Confirme sua senha",
                   }}
-                  errors={errors.confirmPassword}
+                  errors={errors}
                 />
               </div>
               <div className="flex flex-col space-y-4">

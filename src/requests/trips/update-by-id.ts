@@ -1,6 +1,6 @@
 import { AddTripModel, TripModelWithReservations } from "@/interfaces/Trip";
 
-export const loadTripById = async (
+export const updateTripById = async (
   id: string,
   data: Partial<AddTripModel>,
   token: string

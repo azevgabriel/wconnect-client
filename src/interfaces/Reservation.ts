@@ -1,7 +1,7 @@
 export interface ReservationModel {
   id: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   type: "flight" | "hotel" | "car" | "activity";
   value: number;
   status: "confirmed" | "pending" | "cancelled";

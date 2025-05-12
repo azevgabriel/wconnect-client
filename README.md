@@ -30,7 +30,7 @@
 ## Componentes Obrigatórios
 
 - [x] AuthForm: Componente reutilizável para login/registro
-- [ ] TripCard: Card de viagem com status visual
+- [x] TripCard: Card de viagem com status visual
 - [ ] ReservationModal: Modal para criação/edição de reservas
-- [ ] DateRangePicker: Componente customizado para seleção de datas
-- [ ] StatusBadge: Componente de status com cores temáticas
+- [x] DateRangePicker: Componente customizado para seleção de datas
+- [x] StatusBadge: Componente de status com cores temáticas

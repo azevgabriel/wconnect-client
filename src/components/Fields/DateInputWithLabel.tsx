@@ -5,7 +5,7 @@ import {
   LabelHTMLAttributes,
 } from "react";
 
-export interface InputProps {
+export interface DateInputProps {
   name: string;
   inputProps: DetailedHTMLProps<
     InputHTMLAttributes<HTMLInputElement>,
@@ -18,16 +18,15 @@ export interface InputProps {
     >;
     children: React.ReactNode;
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors?: any;
 }
 
-export const InputWithLabel = ({
+export const DateInputWithLabel = ({
   name,
   inputProps,
   label,
   errors,
-}: InputProps) => {
+}: DateInputProps) => {
   return (
     <div>
       {label && (
@@ -40,6 +39,7 @@ export const InputWithLabel = ({
       )}
       <input
         {...inputProps}
+        type="date"
         className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
       />
       {!!errors && (

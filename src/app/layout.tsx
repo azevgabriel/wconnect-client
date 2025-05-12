@@ -10,7 +10,7 @@ const robotofont = Roboto({
 });
 
 const montserratFont = Montserrat({
-  weight: "400",
+  weight: ["400", "500", "600", "700"],
   variable: "--font-montserrat",
   subsets: ["latin"],
 });

@@ -1,15 +1,20 @@
 import { ErrorMessage } from "@hookform/error-message";
 import {
   DetailedHTMLProps,
-  InputHTMLAttributes,
   LabelHTMLAttributes,
+  SelectHTMLAttributes,
 } from "react";
 
-export interface InputProps {
+export interface Option {
+  value: string;
+  label: string;
+}
+
+export interface SelectWithLabelProps {
   name: string;
-  inputProps: DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
+  selectProps: DetailedHTMLProps<
+    SelectHTMLAttributes<HTMLSelectElement>,
+    HTMLSelectElement
   >;
   label?: {
     html: DetailedHTMLProps<
@@ -18,16 +23,17 @@ export interface InputProps {
     >;
     children: React.ReactNode;
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options: Option[];
   errors?: any;
 }
 
-export const InputWithLabel = ({
+export const SelectWithLabel = ({
   name,
-  inputProps,
   label,
+  selectProps,
+  options,
   errors,
-}: InputProps) => {
+}: SelectWithLabelProps) => {
   return (
     <div>
       {label && (
@@ -38,10 +44,16 @@ export const InputWithLabel = ({
           {label.children}
         </label>
       )}
-      <input
-        {...inputProps}
+      <select
+        {...selectProps}
         className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-      />
+      >
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
       {!!errors && (
         <div className="text-red-500 text-sm mt-1">
           <ErrorMessage errors={errors} name={name} />

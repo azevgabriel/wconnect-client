@@ -21,11 +21,7 @@ const handler = NextAuth({
           throw new Error("Email e senha são obrigatórios");
         }
 
-        console.log("response");
-
         const response = await authUser(credentials);
-
-        console.log("response", response);
 
         if (response) {
           const { user, token } = response;
